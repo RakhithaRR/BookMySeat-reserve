@@ -8,30 +8,35 @@
         v-for ="trip in Trips"
         :key = "trip.id">
         <v-layout row>
-          <v-flex md4>
+          <v-flex md3>
             <v-card-title primary-title>
               <div>
                 <h6 class="mb-0 mt-0">{{trip.route}} {{trip.start}} - {{trip.end}}</h6>
               </div>
             </v-card-title>
           </v-flex>
-          <v-flex md4 class="mt-4 ml-4">
+          <v-spacer></v-spacer>
+          <v-flex md3 class="mt-3  pa-2">
             Leaving time: {{trip.time}}
           </v-flex>
-          <v-flex md4>
+          <v-flex md3 >
+            <v-spacer></v-spacer>
             <v-card-actions>
               <v-btn outline flat color="blue" class="mt-2 ml-3">Reserve</v-btn>
             </v-card-actions>
           </v-flex>
         </v-layout>
         <v-layout row>
-          <v-flex md4 class="ml-3">
+          <v-flex md3 class="ml-3">
+            License Number: {{trip.license}}
+          </v-flex>
+          <v-flex md3>
             Starting from: {{trip.start}}
           </v-flex>
-          <v-flex>
+          <v-flex md3 class="ml-1">
             Bus type: {{trip.type}}
           </v-flex>
-          <v-flex class="ml-4">
+          <v-flex md3 class="ml-2">
             Available seats: {{trip.seats}}
           </v-flex>
         </v-layout>
