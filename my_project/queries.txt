@@ -1,0 +1,11 @@
+CREATE TABLE trips (
+  id int NOT NULL AUTO_INCREMENT,
+  license varchar(255) ,
+  route varchar(255),
+  start varchar(255),
+  end varchar(255),
+  time time,
+  type varchar(255),
+  seats int,
+  PRIMARY KEY (id)
+);
