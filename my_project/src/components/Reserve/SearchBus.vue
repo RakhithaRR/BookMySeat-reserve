@@ -54,6 +54,8 @@
           v-model="date"
           prepend-icon="event"
           readonly
+          :rules="[v => !!v || 'Date is required.']"          
+          required
         ></v-text-field>
         <v-date-picker v-model="date" no-title scrollable actions>
           <template slot-scope="{ save, cancel }">
@@ -109,10 +111,11 @@
           },
           headers: {'Content-Type':'application/json'}
         }).then((res) => {
-          if(this.searchValue1 != '' && this.searchValue2 != ''){
+          if(this.searchValue1 != '' && this.searchValue2 != '' && this.date != null){
             if(res.data.output != 'Cannot find the route'){
               console.log(res.data.output);
               localStorage.setItem("searchResult",JSON.stringify(res.data.output));
+              localStorage.setItem("date",JSON.stringify(this.date));
               this.$router.push('/results');
             }
             else{
