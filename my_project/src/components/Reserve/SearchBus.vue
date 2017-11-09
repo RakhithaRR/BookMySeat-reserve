@@ -2,7 +2,7 @@
   <v-container class="mt-0">
     <v-layout row>
       <v-flex xs12>
-        <h3 class="text-xs-center mt-1">Search for Buses</h3>
+        <h3 class="text-xs-center mt-1">Search for Trips</h3>
       </v-flex>
     </v-layout>
     <v-layout row>
@@ -11,7 +11,7 @@
       </v-flex>
     </v-layout>
     <v-layout>
-      <v-flex xs6 md6 offset-xs3>
+      <v-flex xs12 md4 offset-md4>
         <v-alert
           color="warning"
           icon="warning"
@@ -22,26 +22,56 @@
       </v-flex>
     </v-layout>
     <v-layout row>
-      <v-flex xs12 md8 offset-sm2>
+      <v-flex xs12 md4 offset-md4>
         <v-text-field
-          placeholder="ex: Kandy or Badulla"
+          label="From"
           name="value"
           v-model="searchValue"
+          :rules="[v => !!v || 'Starting location is required.']"
           required
-
         ></v-text-field>
-      </v-flex>
-
-    </v-layout>
-    <v-layout row>
-      <v-flex xs12 sm6 offset-sm3>
+        <v-text-field
+          label="To"
+          name="value"
+          
+          :rules="[v => !!v || 'Destination is required.']"
+          required
+        ></v-text-field>
+        <v-menu
+        lazy
+        :close-on-content-click="false"
+        v-model="menu"
+        transition="scale-transition"
+        offset-y
+        full-width
+        :nudge-right="40"
+        max-width="290px"
+        min-width="290px"
+      >
+        <v-text-field
+          slot="activator"
+          label="Date "
+          v-model="date"
+          prepend-icon="event"
+          readonly
+        ></v-text-field>
+        <v-date-picker v-model="date" no-title scrollable actions>
+          <template slot-scope="{ save, cancel }">
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn flat color="primary" @click="cancel">Cancel</v-btn>
+              <v-btn flat color="primary" @click="save">OK</v-btn>
+            </v-card-actions>
+          </template>
+        </v-date-picker>
+      </v-menu>  
         <v-btn
           block
           dark
           v-on:click='searchTrips'
-          >Search</v-btn>
+          >Search
+        </v-btn>
       </v-flex>
-
     </v-layout>
   </v-container>
 </template>
@@ -53,6 +83,10 @@
     name: 'searchBus',
     data() {
       return {
+        menu: false,
+        modal: false,
+
+        date: null,
         searchValue: '',
         banner: false,
         messages: {
