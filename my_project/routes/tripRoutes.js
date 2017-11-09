@@ -3,13 +3,14 @@ const router = express.Router();
 const mysqlCon = require('../server/services/database');
 
 router.post('/search', (req,res,next) => {
-  const value = req.body.searchValue;
-  var searchQuery = "SELECT id,license,route,start,end,time_format(time,'%h:%i %p') time,type,seats FROM trips "
-                    + "WHERE start = '" + value.toString() + "' "
-                    + "OR end = '" + value.toString() + "' "
-                    + "ORDER BY time;";
-
-  mysqlCon.connection.query(searchQuery, (error,results,fields) => {
+  const value1 = req.body.searchValue1;
+  const value2 = req.body.searchValue2;
+  var searchQuery = "SELECT id,license,route,start,end,time_format(time,'%h:%i %p') time,type,seats FROM trips WHERE start LIKE ? AND end LIKE ? ORDER BY time;";
+  
+  mysqlCon.connection.query(searchQuery,[
+            ("%"+value1.toString()+"%"),
+            ("%"+value2.toString()+"%")
+        ],(error,results,fields) => {
     if (error) {
       console.log('Error: '+error);
     }
@@ -35,30 +36,20 @@ router.post('/new',(req,res,next) => {
     var time = req.body.time;
     var seats = req.body.seats;
 
-    var checkQuery = "SELECT * FROM trips WHERE "
-                      // + "license = '" + id.toString() + "' "
-                      + "route = '" + route.toString() + "' "
-                      + "AND start = '" + start.toString() + "' "
-                      + "AND end = '" + end.toString() + "' "
-                      + "AND type = '" + type.toString() + "' "
-                      + "AND time = '" + time.toString() + "' "
-                      + "AND seats = '" + seats.toString() + "';";
+    var checkQuery = "SELECT * FROM trips WHERE route = ? AND start = ? AND end = ? AND type = ? AND time = ? AND seats = ?;";
 
-    var insertQuery = "INSERT INTO trips(license,route,start,end,time,type,seats)" +
-                      " VALUES("
-                      // + "'" + id.toString() + "',"
-                      + "'" + license.toString() + "',"
-                      + "'" + route.toString() + "',"
-                      + "'" + start.toString() + "',"
-                      + "'" + end.toString() + "',"
-                      + "'" + time.toString() + "',"
-                      + "'" + type.toString() + "',"
-                      + "'" + seats.toString() + "'"
-                      +");";
+    var insertQuery = "INSERT INTO trips(license,route,start,end,time,type,seats) VALUES(?,?,?,?,?,?,?);";
 
 
 
-    mysqlCon.connection.query(checkQuery, (error,results,fields) => {
+    mysqlCon.connection.query(checkQuery,[
+              route.toString(),
+              start.toString(),
+              end.toString(),
+              type.toString(),
+              time.toString(),
+              seats.toString()
+          ],(error,results,fields) => {
       if(error){
         console.log('Error: '+error);
         res.json({success:false, output: "Failed"});
@@ -69,7 +60,15 @@ router.post('/new',(req,res,next) => {
           res.json({success: false, output: "Exists"});
         }
         else{
-          mysqlCon.connection.query(insertQuery,(error,results,fields) => {
+          mysqlCon.connection.query(insertQuery,[
+                                license.toString(),
+                                route.toString(),
+                                start.toString(),
+                                end.toString(),
+                                time.toString(),
+                                type.toString(),
+                                seats.toString()
+                            ],(error,results,fields) => {
             if(error) throw error;
             console.log('Successful');
             res.json({success:true, output: "Successful"});

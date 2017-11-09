@@ -26,14 +26,14 @@
         <v-text-field
           label="From"
           name="value"
-          v-model="searchValue"
+          v-model="searchValue1"
           :rules="[v => !!v || 'Starting location is required.']"
           required
         ></v-text-field>
         <v-text-field
           label="To"
           name="value"
-          
+          v-model="searchValue2"
           :rules="[v => !!v || 'Destination is required.']"
           required
         ></v-text-field>
@@ -87,7 +87,8 @@
         modal: false,
 
         date: null,
-        searchValue: '',
+        searchValue1: '',
+        searchValue2: '',
         banner: false,
         messages: {
           errorMessage: ''
@@ -102,10 +103,13 @@
         axios({
           method: 'post',
           url: 'http://localhost:3000/search',
-          data: {searchValue: this.searchValue},
+          data: {
+            searchValue1: this.searchValue1,
+            searchValue2: this.searchValue2
+          },
           headers: {'Content-Type':'application/json'}
         }).then((res) => {
-          if(this.searchValue != ''){
+          if(this.searchValue1 != '' && this.searchValue2 != ''){
             if(res.data.output != 'Cannot find the route'){
               console.log(res.data.output);
               localStorage.setItem("searchResult",JSON.stringify(res.data.output));
