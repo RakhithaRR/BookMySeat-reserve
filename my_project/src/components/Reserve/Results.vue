@@ -8,7 +8,7 @@
         v-for ="trip in Trips"
         :key = "trip.id">
         <v-layout row>
-          <v-flex md3>
+          <v-flex md4>
             <v-card-title primary-title>
               <div>
                 <h6 class="mb-0 mt-0">{{trip.route}} {{trip.start}} - {{trip.end}}</h6>

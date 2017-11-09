@@ -125,6 +125,7 @@
         success: false,
         valid: true,
 
+        menu2: false,
 //        id: '',
         license: '',
         route: '',
